@@ -15,7 +15,7 @@
             type="text"
             required
             placeholder="Enter your name"
-            :disabled="isSubmitting"
+            :disabled="store.loading"
             class="backdrop-blur-sm"
           />
         </div>
@@ -29,7 +29,7 @@
             min="1"
             required
             placeholder="Enter count"
-            :disabled="isSubmitting"
+            :disabled="store.loading"
             class="backdrop-blur-sm"
           />
         </div>

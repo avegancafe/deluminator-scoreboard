@@ -44,7 +44,7 @@
                 {{ score.name }}
               </div>
               <div class="text-xs text-muted-foreground">
-                {{ getRelativeTime(score.lastUpdated) }}
+                {{ getRelativeTime(score.updatedAt) }}
               </div>
             </div>
           </div>

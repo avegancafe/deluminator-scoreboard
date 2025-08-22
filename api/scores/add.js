@@ -52,7 +52,8 @@ export default async function handler(req, res) {
       ],
       select: {
         name: true,
-        count: true
+        count: true,
+        updatedAt: true
       }
     })
 

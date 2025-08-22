@@ -79,9 +79,6 @@ const mockPrismaClient = {
   }
 }
 
-// Override the prisma import globally for local dev
-const originalImport = await import
-
 // Mock the prisma module for local development
 const createMockHandler = (apiPath) => {
   return async (req, res) => {
