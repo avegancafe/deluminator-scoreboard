@@ -1,9 +1,4 @@
-// Use global kv for local development, or import from @vercel/kv for production
-const getKV = async () => {
-  if (global.kv) return global.kv;
-  const { kv } = await import('@vercel/kv');
-  return kv;
-};
+import { prisma } from '../../lib/prisma.js'
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -22,19 +17,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const kv = await getKV();
-    
-    // Clear all scores and reset stats
+    // Clear all scores using Prisma
+    await prisma.score.deleteMany()
+
     const emptyStats = {
       totalUnalived: 0,
       totalContributors: 0,
       averagePerContributor: 0
     };
-
-    await Promise.all([
-      kv.set('scores:leaderboard', []),
-      kv.set('scores:stats', emptyStats)
-    ]);
 
     res.status(200).json({
       success: true,

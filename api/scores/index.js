@@ -1,9 +1,4 @@
-// Use global kv for local development, or import from @vercel/kv for production
-const getKV = async () => {
-  if (global.kv) return global.kv;
-  const { kv } = await import('@vercel/kv');
-  return kv;
-};
+import { prisma } from '../../lib/prisma.js'
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -22,23 +17,35 @@ export default async function handler(req, res) {
   }
 
   try {
-    const kv = await getKV();
-    
-    // Get scores from Vercel KV
-    const scores = await kv.get('scores:leaderboard');
-    const stats = await kv.get('scores:stats');
-
-    // Return empty arrays if no data exists
-    const responseData = {
-      scores: scores || [],
-      stats: stats || {
-        totalUnalived: 0,
-        totalContributors: 0,
-        averagePerContributor: 0
+    // Get all scores ordered by count desc, then by creation date
+    const scores = await prisma.score.findMany({
+      orderBy: [
+        { count: 'desc' },
+        { createdAt: 'asc' }
+      ],
+      select: {
+        name: true,
+        count: true
       }
+    })
+
+    // Calculate stats
+    const totalUnalived = scores.reduce((sum, score) => sum + score.count, 0);
+    const totalContributors = scores.length;
+    const averagePerContributor = totalContributors > 0 ? Math.round(totalUnalived / totalContributors) : 0;
+
+    const stats = {
+      totalUnalived,
+      totalContributors,
+      averagePerContributor
     };
 
-    res.status(200).json(responseData);
+    res.status(200).json({
+      success: true,
+      scores,
+      stats
+    });
+
   } catch (error) {
     console.error('Error fetching scores:', error);
     res.status(500).json({ 

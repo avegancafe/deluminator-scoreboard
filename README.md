@@ -6,7 +6,7 @@ A Vue.js application for tracking lanternfly elimination efforts with real-time 
 
 - 📊 **Real-time Leaderboard**: See who's contributing the most to lanternfly elimination
 - 🎯 **Easy Reporting**: Simple form to report your daily unaliving count
-- ☁️ **Cloud Storage**: Data persisted with Vercel KV (Redis)
+- ☁️ **Cloud Storage**: Data persisted with Vercel Postgres
 - 🎨 **Modern UI**: Built with Vue 3, shadcn/ui components, and Tailwind CSS
 - 📱 **Responsive**: Works perfectly on mobile and desktop
 - ⚡ **Real-time Sync**: Updates shared across all users instantly
@@ -16,7 +16,7 @@ A Vue.js application for tracking lanternfly elimination efforts with real-time 
 
 - **Frontend**: Vue 3, Pinia, Tailwind CSS, shadcn/ui
 - **Backend**: Vercel Serverless Functions
-- **Database**: Vercel KV (Redis)
+- **Database**: Postgres with Prisma ORM
 - **Deployment**: Vercel with automatic HTTPS and global CDN
 
 ## Development
@@ -68,16 +68,18 @@ The app will be available at `http://localhost:5173` with the API at `http://loc
 vercel --prod
 ```
 
-3. **Add KV Database**:
+3. **Add Postgres Database**:
    - Go to your Vercel project dashboard
    - Navigate to "Storage" tab
-   - Click "Create Database" → "KV"
-   - Name it (e.g., "deluminator-kv")
-   - Connect it to your project
+   - Browse Marketplace for Postgres providers
+   - Select a provider (like Neon, Supabase, or PlanetScale)
+   - Follow setup wizard to connect to your project
 
-4. **Environment Variables**: The KV connection variables will be automatically added:
-   - `KV_REST_API_URL`
-   - `KV_REST_API_TOKEN`
+4. **Environment Variables**: The Postgres connection variables will be automatically added:
+   - `DATABASE_URL` (main connection for Prisma)
+   - `DIRECT_URL` (for migrations and schema operations)
+
+5. **Database Setup**: After deployment, the database schema will be automatically created on first API call
 
 Your app will be live at `https://your-project-name.vercel.app`!
 
