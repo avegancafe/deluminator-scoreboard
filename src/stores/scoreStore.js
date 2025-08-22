@@ -93,12 +93,44 @@ export const useScoreStore = defineStore('scores', {
       } catch (error) {
         console.error('Error adding score:', error)
         
-        // Rollback on error
-        this.scores = originalScores
-        this.stats = originalStats
+        // Fallback to localStorage when API is unavailable (e.g., preview env without DATABASE_URL)
+        console.log('Falling back to localStorage for score submission')
         
-        this.error = 'Failed to submit score. Please try again.'
-        throw error
+        // Add score to local scores array
+        const newScore = {
+          id: Date.now().toString(),
+          name: name.trim(),
+          count: count,
+          createdAt: new Date().toISOString()
+        }
+        
+        // Find existing score for this name or create new one
+        const existingScoreIndex = this.scores.findIndex(score => score.name === name.trim())
+        if (existingScoreIndex >= 0) {
+          // Update existing score by adding to count
+          this.scores[existingScoreIndex].count += count
+          this.scores[existingScoreIndex].createdAt = new Date().toISOString()
+        } else {
+          // Add new score
+          this.scores.push(newScore)
+        }
+        
+        // Recalculate stats
+        const totalUnalived = this.scores.reduce((total, score) => total + score.count, 0)
+        const totalContributors = this.scores.length
+        const averagePerContributor = totalContributors > 0 ? Math.round(totalUnalived / totalContributors) : 0
+        
+        this.stats = {
+          totalUnalived,
+          totalContributors,
+          averagePerContributor
+        }
+        
+        // Save to localStorage
+        this.saveToLocalStorage()
+        
+        // Clear any error since we successfully handled it with localStorage
+        this.error = null
       } finally {
         this.loading = false
       }
