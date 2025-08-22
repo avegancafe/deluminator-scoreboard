@@ -16,6 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to Vercel
+    environment: ${{ github.event.inputs.environment }}
     
     steps:
       - name: Checkout code
