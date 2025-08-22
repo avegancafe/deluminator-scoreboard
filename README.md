@@ -83,6 +83,30 @@ vercel --prod
 
 Your app will be live at `https://your-project-name.vercel.app`!
 
+## GitHub Actions Deployment
+
+This repository includes a GitHub Action for manual deployment to Vercel.
+
+### Setup GitHub Secrets
+
+To use the GitHub Action, add these secrets to your repository:
+
+1. Go to your GitHub repository → Settings → Secrets and variables → Actions
+2. Add the following secrets:
+   - `VERCEL_TOKEN`: Your Vercel API token (get from [Vercel Account Settings](https://vercel.com/account/tokens))
+   - `VERCEL_ORG_ID`: Your team/organization ID (found in `.vercel/project.json` after deploying)
+   - `VERCEL_PROJECT_ID`: Your project ID (found in `.vercel/project.json` after deploying)
+
+### Manual Deployment
+
+1. Go to your GitHub repository → Actions tab
+2. Select "Deploy to Vercel" workflow
+3. Click "Run workflow"
+4. Choose environment (production or preview)
+5. Click "Run workflow"
+
+The action will build and deploy your app, then show the deployment URL in the summary.
+
 ## Usage
 
 1. **Report Lanternflies**: Enter your name and count, then click "Submit Report"
