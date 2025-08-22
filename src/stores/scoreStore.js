@@ -50,7 +50,8 @@ export const useScoreStore = defineStore('scores', {
         }
       } catch (error) {
         console.error('Error fetching scores:', error)
-        this.error = 'Failed to load scores. Please try again.'
+        // Don't show error message for initial load failures (e.g., missing DATABASE_URL in preview)
+        // this.error = 'Failed to load scores. Please try again.'
       } finally {
         this.loading = false
       }
