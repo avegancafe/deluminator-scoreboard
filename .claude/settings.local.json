@@ -37,7 +37,9 @@
       "mcp__vercel__web_fetch_vercel_url",
       "mcp__playwright__browser_evaluate",
       "mcp__playwright__browser_wait_for",
-      "mcp__vercel__get_project"
+      "mcp__vercel__get_project",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [],
     "ask": [],
